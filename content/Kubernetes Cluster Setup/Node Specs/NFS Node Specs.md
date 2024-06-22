@@ -1,0 +1,4 @@
+intel i5-4690k CPU
+16 GB DDR3 RAM
+1 TB WD Blue HDD
+2 x 4 TB WD Red HDD

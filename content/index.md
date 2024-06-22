@@ -1,5 +1,5 @@
 ---
-title: Welcome to Quartz
+title: Kubernetes Cluster Setup
 ---
 
 This is a blank Quartz installation.
