@@ -1,24 +1,27 @@
+These are the variables that we can make use of in our config:
 Prompt -- Prompt-wide config options
--Battery --how charged device battery is
--Character -- Shows a character beside where the text is displayed in your terminal
+_Battery_ --how charged device battery is
+_Character_ -- Shows a character beside where the text is displayed in your terminal
 Container -- container name if inside container
--Directory -- Path to current directory
+_Directory_ -- Path to current directory
 Environmental Variable -- displays env variables
 Git Branch -- active branch
 Git Metrics -- number of changed lines
 Git Status -- state of repo in directory
--Hostname -- hostname
-Kubernetes -- current context, namespace, user, cluster, and other details
+_Hostname_ -- hostname
+_Kubernetes_ -- current context, namespace, user, cluster, and other details
 Local IP -- IPv4 of primary network interface
 Memory Usage -- current system memory
--OS -- shows current OS
--Shell -- Shows current Shell
+_OS_ -- shows current OS
+_Shell_ -- Shows current Shell
 Status -- Exit code of previous Command
--Sudo -- shows if Sudo credentials are cached
--Time -- Shows current local time
--Username -- username of current user
+_Sudo_ -- shows if Sudo credentials are cached
+_Time_ -- Shows current local time
+_Username_ -- username of current user
 Custom Commands -- unique use cases
-use ()) on variables that are optional
+use () on variables that are optional
+
+My config:
 ```
 #start with a blank line to make terminal less claustrophobic
 add_newline = true

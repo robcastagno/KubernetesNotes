@@ -1,23 +1,15 @@
-Migrating drive to new system, internet is not up
+# Migrating drive to new system, internet is not up
 `ip addr` grab interface name
 `sudo ip link set <interface_name> up`
 need to update host name in router device list:
 `sudo dhclient -r && sudo dhclient`
 Also need to change the netplan in `/etc/netplan/00-installer-config.yaml`
 
-Turn off monitor on All in One system
+# Turn off monitor on All-in-One system
 `sudo nano /etc/default/grub`
 edit line:
 `GRUB_CMDLINE_LINUX_DEFAULT="consoleblank=60"`
 save, close, reload grub with `sudo update-grub`
-
-backup etcd
-set up autodeployment of a cluster
-worker nodes can also function as control planes
-two control planes for redundancy. 
-`kubeadm token create`
-
-Use Ansible instead of terraform :c
 # Accidentally joined a node incorrectly
 (Don't do this if you can avoid it lol)
 Drain the Node
@@ -45,7 +37,7 @@ This can be used in less secure environments to skip the has process
 Create new join command with:
 `kubeadm token create --print-join-command`
 
-raspberry pi resets ssh and hosts files on restart
+# raspberry pi resets ssh and hosts files on restart
 `sudo nano /etc/cloud/cloud.cfg`
 ```
 cloud_init_modules:
@@ -65,34 +57,6 @@ cloud_init_modules:
   - users_groups
 #  - ssh
 ```
-Calico installation for x86
-```
-cd /usr/local/bin/
-sudo curl -o calicoctl -O -L https://github.com/projectcalico/calico/releases/download/v3.27.0/calicoctl-linux-amd64
-sudo chmod +x calicoctl
-```
-
-ARM processors are fuckin wild bro
-```
-cd /usr/local/bin/
-sudo curl -o calicoctl -O -L https://github.com/projectcalico/calico/releases/download/v3.27.0/calicoctl-linux-arm64
-sudo chmod +x calicoctl
-```
-
-```
-kubectl label
-```
-
-`sudo ufw allow 7946`
-
-Route Static node requests to MetalLB ip address:
-```
-iptables -t nat -A PREROUTING -p tcp --dport 80 -j DNAT --to-destination 192.168.86.35:80
-iptables -t nat -A PREROUTING -p tcp --dport 443 -j DNAT --to-destination 192.168.86.35:443
-iptables -A FORWARD -p tcp -d 192.168.86.35 --dport 80 -j ACCEPT
-iptables -A FORWARD -p tcp -d 192.168.86.35 --dport 443 -j ACCEPT
-```
-^This did not work :/
 # Can't Delete a namespace (???)
 Likely a resource with "finalizers" on it in the way
 find all resource types in the cluster
@@ -107,3 +71,29 @@ for resource in $(kubectl api-resources --verbs=list --namespaced=true -o name);
 done
 ```
 Check each resource within the namespace, if it exists, use `kubectl edit` to remove the finalizers. 
+
+# Local Fileserver for uploading plugins/mods to Minecraft
+Make sure Python is installed and up to date
+`python --version`
+
+Navigate to the directory:
+`cd C:\path\to\files`
+
+Start the http server:
+`python -m http.server 8000`
+
+Verify the local server:
+Go to http://localhost:8000
+
+Downloads can now be received at:
+`http://<Host IP>:8000/<filename>`
+
+Just use LoadBalancer IP and port for routing.
+# Diagnosing ARP issues with MetalLB
+## From Node
+`sudo tcpdump -i <interface> host <external-ip> and port <port number>`
+Use to check that requests are being received on the specific port.
+## From Windows Machine
+`arp inet_addr <ip address>` sends an ARP request to a specific address
+`arp -a` Shows the full list of ARP addresses
+`arp -d` Requires elevation, clears the ARP table
