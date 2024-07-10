@@ -21,7 +21,7 @@ _Username_ -- username of current user
 Custom Commands -- unique use cases
 use () on variables that are optional
 
-My config:
+My configs:
 ```
 #start with a blank line to make terminal less claustrophobic
 add_newline = true

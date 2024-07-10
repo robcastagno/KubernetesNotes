@@ -1,4 +1,4 @@
-# Setup
+# 5.1 - Setup
 1. Install Ansible:
 ```
 sudo apt update
@@ -33,7 +33,8 @@ ssh <user>@<host>
 ssh-agent bash/zsh
 ssh-add <sshkey>
 ```
-# Inventories
+
+# 5.2 - Inventories
 Create a file `inventory.yaml`
 ```
 <group>:
@@ -50,10 +51,7 @@ Verify the inventory:
 Ping the inventory:
 `ansible <group> -m ping -i inventory.yaml`
 
-Inventory structure:
-
-## Metagroups
-
+## 5.2.1 - Metagroups
 After creating groups, they can be organized into metagroups.
 ```
 <metagroup>:
@@ -62,11 +60,9 @@ After creating groups, they can be organized into metagroups.
     <group2>:
 ```
 
-## Variables
-
+## 5.2.2 - Variables
 Variables allow for changing and tweaking values of managed nodes so they don't need to be passed by ansible commands.
 They can apply to specific hosts or all hosts in a group.
-
 ```
 <group>:
   hosts:
@@ -90,7 +86,8 @@ They can apply to specific hosts or all hosts in a group.
   vars:
     ansible_user: my_server_user
 ```
-# Playbooks
+
+# 5.3 - Playbooks
 Create a playbook yaml file:
 `playbook.yaml`
 Run the playbook:
@@ -98,9 +95,9 @@ Run the playbook:
 Check the playbook:
 `ansible-playbook --check playbook.yaml`
 `--check, --diff, --list-hosts, --list-tasks, --syntax-check`
-
 `--ask-become-pass for root password`
-## Syntax
+
+## 5.3.1 - Syntax
 ```
 Example:
 ---
@@ -134,17 +131,13 @@ Example:
       name: postgresql
       state: started
 ```
-# Vaults
+
+# 5.4 - Vaults
 1. Create a `group_vars/` subdirectory named after the group.
-
 2. Inside this subdirectory, create two files named `vars` and `vault`.
-
 3. In the `vars` file, define all of the variables needed, including any sensitive ones.
-
 4. Copy all of the sensitive variables over to the `vault` file and prefix these variables with `vault_`.
-
 5. Adjust the variables in the `vars` file to point to the matching `vault_` variables using jinja2 syntax: `db_password: {{ vault_db_password }}`.
-
 6. Encrypt the `vault` file to protect its contents.
 `ansible-vault create --vault-id`
 7. Use the variable name from the `vars` file in your playbooks.

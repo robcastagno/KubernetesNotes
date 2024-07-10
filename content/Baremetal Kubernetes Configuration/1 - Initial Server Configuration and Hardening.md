@@ -1,4 +1,4 @@
-# 1- General Ubuntu Setup
+# 1.1 - General Ubuntu Setup
 Server setup process: Ubuntu 20.04:
 ```
 English
@@ -36,7 +36,7 @@ Done (Skip snaps)
 Reboot Now (remove install drive)
 ```
 
-# 2- Server Hardening
+# 1.2 - Server Hardening
 **Initial Setup and hardening of Ubuntu Server 20.04:**
 ```
 sudo timedatectl set-timezone America/New_York
@@ -130,23 +130,20 @@ or
 sudo systemctl restart sshd
 ```
 
-
-# 3- Starting the nfs Server
+# 1.3 - Starting the nfs Server
 Install nfs server:
 ```
 sudo apt install nfs-kernel-server -y
 ```
-
 Configure the nfs server:
 `sudo nano /etc/exports`
 ```
 /storage  <KUBERNETES_NODE_IP>(rw,sync,no_root_squash,no_subtree_check)
 ```
 
-# 4- Configuring zsh
+# 1.4 - Configuring zsh
 Install Zsh:
 `sudo apt install zsh -y`
-
 Go through setup process: `zsh`
 My Config:
 ```
@@ -174,14 +171,12 @@ sudo -s
 chsh -s /bin/zsh root
 chsh -s /bin/zsh <user>
 ```
-
 Install Oh My Zsh:
 `sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"`
 Install Zsh autosuggestions:
 `git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions`
 Install zsh-syntax-highlighting:
 `git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting`
-
 Update plugins list:
 `nano .zshrc`
 ```
@@ -191,7 +186,8 @@ plugins=(
     zsh-syntax-highlighting
     )
 ```
-# 5- Setting up Starship
+
+# 1.5 - Setting up Starship
 install starship:
 `sh -c "$(curl -fsSL https://starship.rs/install.sh)"`
 Add Starship to the bash config:

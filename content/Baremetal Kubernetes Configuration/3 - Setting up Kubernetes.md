@@ -1,12 +1,12 @@
-# 1. Install Prerequisites
-Switch to root:
+# 3.1 - Install Prerequisites
+1. Switch to root:
 `sudo -i`
-Load modules for next steps:
+2. Load modules for next steps:
 ```
 modprobe overlay
 modprobe br_netfilter
 ```
-Update kernel networking to allow necessary traffic:
+3. Update kernel networking to allow necessary traffic:
 ```
 cat << EOF | tee /etc/sysctl.d/kubernetes.conf
 net.bridge.bridge-nf-call-ip6tables = 1
@@ -14,31 +14,32 @@ net.bridge.bridge-nf-call-iptables = 1
 net.ipv4.ip_forward = 1
 EOF
 ```
-Install necessary key for containerd:
+4. Install necessary key for containerd:
 ```
 mkdir -p /etc/apt/keyrings
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 ```
-Install containerd:
+5. Install containerd:
 ```
 apt-get update && apt-get install containerd.io -y
 containerd config default | tee /etc/containerd/config.toml
 sed -e 's/SystemdCgroup = false/SystemdCgroup = true/g' -i /etc/containerd/config.toml
 systemctl restart containerd
 ```
-Add repo for Kubernetes and then install it (Might be outdated):
+6. Add repo for Kubernetes and then install it (Might be outdated):
 ```
 echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
 curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 apt-get update && apt-get install -y kubeadm=1.30.1-00 kubelet=1.30.1-00 kubectl=1.30.1-00
 apt-mark hold kubelet kubeadm kubectl
 ```
-Add the host IP address in the hosts file and tie it to k8scp:
+7. Add the host IP address in the hosts file and tie it to k8scp:
 `nano /etc/hosts`
-# 2. Initialize the Cluster
+
+# 3.2 - Initialize the Cluster
 **Must be logged into root account:**
-Set up the kubeadm initialization script (Might be outdated):
+1. Set up the kubeadm initialization script (Might be outdated):
 `nano kubeadm-config.yaml`
 ```
 apiVersion: kubeadm.k8s.io/v1beta3
@@ -64,11 +65,11 @@ apiVersion: kubeproxy.config.k8s.io/v1alpha1
 kind: KubeProxyConfiguration
 mode: "ipvs"
 ```
-Need to enable ipv4 forwarding:
+2. Need to enable ipv4 forwarding:
 `echo 1 > /proc/sys/net/ipv4/ip_forward`
-Initiate the Kubernetes cl;uster:
+3. Initiate the Kubernetes cl;uster:
 `kubeadm init --config=kubeadm-config.yaml --upload-certs | tee kubeadm-init.out`
-Exit root user and configure the node for the standard user account:
+4. Exit root user and configure the node for the standard user account:
 ```
 exit
 mkdir -p $HOME/.kube
@@ -77,7 +78,7 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 sudo cp /root/calico.yaml .
 kubectl apply -f calico.yaml
 ```
-Install Helm:
+5. Install Helm:
 ```
 curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null
 sudo apt-get install apt-transport-https --yes
@@ -85,19 +86,20 @@ echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.
 sudo apt-get update && sudo apt-get install helm
 ```
 
-# 3. Join a Node to the Cluster
-## Control Plane Setup
+# 3.3 - Join a Node to the Cluster
+
+## 3.3.1 - Control Plane Setup
 **Must be logged into root account:**
-Need to enable ipv4 forwarding:
+1. Need to enable ipv4 forwarding:
 `echo 1 > /proc/sys/net/ipv4/ip_forward`
-Initiate the Kubernetes node:
+2. Initiate the Kubernetes node:
 ```
 kubeadm join k8scp:6443 --token <token> /
 --discovery-token-ca-cert-hash sha256:<token sha256 hash> /
 --control-plane /
 --certificate-key <certificate key> | tee kubeadm-join.out
 ```
-Exit root user and configure the node for the standard user account:
+3. Exit root user and configure the node for the standard user account:
 ```
 exit
 mkdir -p $HOME/.kube
@@ -106,19 +108,19 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 sudo cp /root/calico.yaml .
 kubectl apply -f calico.yaml
 ```
-(Optional) Remove taints from the node to allow scheduling workloads:
+4. (Optional) Remove taints from the node to allow scheduling workloads:
 ```
 kubectl taint nodes <hostname> node-role.kubernetes.io/control-plane:NoSchedule-
 ```
-
-(Optional) Install Helm:
+5. (Optional) Install Helm:
 ```
 curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null
 sudo apt-get install apt-transport-https --yes
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
 sudo apt-get update && sudo apt-get install helm
 ```
-## Worker Node Setup
+
+## 3.3.2 - Worker Node Setup
 **Must be logged into root account:**
 Need to enable ipv4 forwarding:
 `echo 1 > /proc/sys/net/ipv4/ip_forward`

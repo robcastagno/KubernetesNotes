@@ -1,16 +1,18 @@
-# 1- Installing the CNI (Calico)
+# 4.1 - Installing the CNI (Calico)
 Install the Tigera Operator:
-`
 `kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/tigera-operator.yaml`
+
 Download the custom resources:
 `curl https://raw.githubusercontent.com/projectcalico/calico/v3.28.0/manifests/custom-resources.yaml -O`
+
 Create the manifest to install Calico:
 `kubectl create -f custom-resources.yaml`
 
 To update, just `kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v<version>/manifests/tigera-operator.yaml` and it will update itself.
 
 Todo: Look into further configurations and controls provided by Calico
-# 2- Setting up LoadBalancing (MetalLB)
+
+# 4.2 - Setting up LoadBalancing (MetalLB)
 [Installation](https://metallb.universe.tf/installation/)
 It's necessary to switch kube-proxy to strictARP in IPVS mods for this to work
 `kubectl edit configmap -n kube-system kube-proxy`
@@ -21,6 +23,7 @@ mode: "ipvs"
   ipvs:
     strictARP: true
 ```
+
 Apply the MetalLB manifest to install:
 `kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.14.5/config/manifests/metallb-native.yaml`
 
@@ -46,7 +49,8 @@ L2Advertisements will default to whatever IPAddressPools are available to advert
 
 When configuring Services to utilize a LoadBalancer, if they need to/can share an IP address, make use of the `metallb.universe.tf/allow-shared-ip: "key"` annotation. MetalLB will "try" to colocate services to that IP. [Example in official Documentation](https://metallb.universe.tf/usage/)
 This doesn't allow for two different services to use two different protocols on the same numbered port. 
-# 3- Dynamic Provisioning with an nfs server (nfs-subdir-external-provisioner)
+
+# 4.3 - Dynamic Provisioning with an nfs server (nfs-subdir-external-provisioner)
 By default, Kubernetes doesn't support nfs servers as a dynamic storage backend...but...
 There's a workaround, using this helm chart:
 `helm repo add nfs-subdir-external-provisioner https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner/`
@@ -61,7 +65,8 @@ helm install nfs-subdir-external-provisioner nfs-subdir-external-provisioner/nfs
 -n nfs-subdir-external-provisioner
 ```
 [Github](https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner)
-# 4- Automatic SSL Certificates (Cert Manager)
+
+# 4.4 - Automatic SSL Certificates (Cert Manager)
 [Installation](https://cert-manager.io/docs/installation/kubectl/)
 Just apply the manifest:
 `kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.15.0/cert-manager.yaml`
@@ -114,7 +119,8 @@ spec:
     name: cloudflare-issuer
     kind: Issuer
 ```
-# 5- Ingress Controller (Traefik)
+
+# 4.5 - Ingress Controller (Traefik)
 We use the helm chart for this one:
 ```
 helm repo add traefik https://traefik.github.io/charts
