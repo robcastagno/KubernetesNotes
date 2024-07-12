@@ -75,8 +75,6 @@ exit
 mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
-sudo cp /root/calico.yaml .
-kubectl apply -f calico.yaml
 ```
 5. Install Helm:
 ```
@@ -105,8 +103,6 @@ exit
 mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
-sudo cp /root/calico.yaml .
-kubectl apply -f calico.yaml
 ```
 4. (Optional) Remove taints from the node to allow scheduling workloads:
 ```
