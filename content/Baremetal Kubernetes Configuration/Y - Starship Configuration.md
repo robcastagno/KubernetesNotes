@@ -1,24 +1,24 @@
 These are the variables that we can make use of in our config:
-Prompt -- Prompt-wide config options
-_Battery_ --how charged device battery is
-_Character_ -- Shows a character beside where the text is displayed in your terminal
-Container -- container name if inside container
-_Directory_ -- Path to current directory
-Environmental Variable -- displays env variables
-Git Branch -- active branch
-Git Metrics -- number of changed lines
-Git Status -- state of repo in directory
-_Hostname_ -- hostname
-_Kubernetes_ -- current context, namespace, user, cluster, and other details
-Local IP -- IPv4 of primary network interface
-Memory Usage -- current system memory
-_OS_ -- shows current OS
-_Shell_ -- Shows current Shell
-Status -- Exit code of previous Command
-_Sudo_ -- shows if Sudo credentials are cached
-_Time_ -- Shows current local time
-_Username_ -- username of current user
-Custom Commands -- unique use cases
+- Prompt -- Prompt-wide config options
+- _Battery_ --how charged device battery is
+- _Character_ -- Shows a character beside where the text is displayed in your terminal
+- Container -- container name if inside container
+- _Directory_ -- Path to current directory
+- Environmental Variable -- displays env variables
+- Git Branch -- active branch
+- Git Metrics -- number of changed lines
+- Git Status -- state of repo in directory
+- _Hostname_ -- hostname
+- _Kubernetes_ -- current context, namespace, user, cluster, and other details
+- Local IP -- IPv4 of primary network interface
+- Memory Usage -- current system memory
+- _OS_ -- shows current OS
+- _Shell_ -- Shows current Shell
+- Status -- Exit code of previous Command
+- _Sudo_ -- shows if Sudo credentials are cached
+- _Time_ -- Shows current local time
+- _Username_ -- username of current user
+- Custom Commands -- unique use cases
 use () on variables that are optional
 
 My configs:
